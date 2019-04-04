@@ -28,19 +28,19 @@ class RequestActions {
 
   build() {
     this.type = `${this._actionsPrefix}_${this._actionName}`
-    this.action = (data: object): Action => this._action(this.type, data)
-    this.types = this._createRequestTypes()
-    this.actions = this._createRequestActions()
+    this.action = (data?: object): Action => this._action(this.type, data)
+    this.types = this._buildRequestTypes()
+    this.actions = this._buildRequestActions()
   }
 
-  _createRequestActions(): RequestFuncs {
+  _buildRequestActions(): RequestFuncs {
     return Object.keys(ActionTypes).reduce((actions, type) => {
       actions[type] = (data: object): Action => this._action(this.types[type], data)
       return actions
     }, {}) as RequestFuncs
   }
 
-  _createRequestTypes(): RequestTypes {
+  _buildRequestTypes(): RequestTypes {
     return Object.keys(ActionTypes).reduce((types, type) => {
       types[type] = `${this.type}_${type.toUpperCase()}`
       return types
