@@ -1,0 +1,26 @@
+{
+  "name": "redux-saga-requests",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/Pitbi/redux-saga-request.git"
+  },
+  "keywords": [
+    "redux",
+    "redux-saga",
+    "http",
+    "requests",
+    "actions"
+  ],
+  "author": "Pierre Biezemans",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Pitbi/redux-saga-request/issues"
+  },
+  "homepage": "https://github.com/Pitbi/redux-saga-request#readme"
+}
