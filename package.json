@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "jest --no-cache",
-    "testw": "yarn test --watch"
+    "testw": "yarn test --watch",
+    "build": "tsc"
   },
   "repository": {
     "type": "git",
