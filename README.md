@@ -17,7 +17,7 @@
 
 actions.js
 
-    const memberRequestActions = new RequestActions('MEMBER')
+    const memberRequestActions = new RestActions('MEMBER')
 
 component.jsx
 
