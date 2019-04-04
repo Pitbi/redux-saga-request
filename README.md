@@ -2,5 +2,12 @@
 
 ## Get started
 
-    yarn or npm install
-    yarn testw or npm testw
+    yarn
+    yarn testw
+    
+### To do
+
+- ✅ RequestAction
+- ✅ RestActions
+- 🔲 RequestSagas
+- 🔲 RestSagas
