@@ -23,10 +23,10 @@ class RequestActions {
   constructor(actionName: string, config: RequestActionConfig = {}) {
     this._actionName = actionName
     this._actionsPrefix = config.actionsPrefix || '@@RA'
-    this.build()
+    this._build()
   }
 
-  build() {
+  _build() {
     this.type = `${this._actionsPrefix}_${this._actionName}`
     this.action = (data?: object): Action => this._action(this.type, data)
     this.types = this._buildRequestTypes()
