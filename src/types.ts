@@ -64,3 +64,14 @@ export interface RestActionsMethods {
   patch: RequestActions
 }
 
+//Request Sagas
+
+export interface RequestSagasConfig {
+  reduxSagaEffect: string
+}
+
+export interface RequestSagasApiConfig {
+  url: string,
+  method: string,
+  [key: string]: any
+}

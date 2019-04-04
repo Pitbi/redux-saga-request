@@ -26,7 +26,8 @@
   },
   "homepage": "https://github.com/Pitbi/redux-saga-request#readme",
   "dependencies": {
-    "lodash": "^4.17.11"
+    "lodash": "^4.17.11",
+    "redux-saga": "^1.0.2"
   },
   "devDependencies": {
     "@types/jest": "^24.0.11",
