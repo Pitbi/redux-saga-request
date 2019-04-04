@@ -16,8 +16,13 @@ class RequestSagas {
     this._config = config
   }
 
+  static API() {
+    throw 'No API method setted'
+  }
+
   * start(action) {
-    const emitter = this._apiConfig.API
+    const API = this._apiConfig.API || RequestSagas.API
+    const emitter = API(action, this._apiConfig, this._requestActions.actions)
     yield reduxSagaEffects.fork(this.progressListener, emitter)
   }
 
