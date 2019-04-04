@@ -38,6 +38,14 @@ sagas.js
       endpoint: '/members'
     })
 
+    postMemberSagas.success = function* (action) {
+      ...
+    }
+
+    postMemberSagas.failure = function* (action) {
+      ...
+    }
+
     export default [
       fork(postMemberSagas.saga)
     ]
