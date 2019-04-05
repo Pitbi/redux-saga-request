@@ -67,7 +67,7 @@ export interface RestActionsMethods {
 //Request Sagas
 
 export interface RequestSagasConfig {
-  reduxSagaEffect: string
+  reduxSagaEffect?: string
 }
 
 export interface RequestSagasApiConfig {
