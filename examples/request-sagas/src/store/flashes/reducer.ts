@@ -15,6 +15,12 @@ export const flashesReducer: Reducer<FlashesState> = (state = initialState, acti
         message: action.payload.message
       }
     }
+    case ActionType.HideFlash: {
+      return {
+        ...state,
+        message: undefined
+      }
+    }
     default: {
       return state
     }

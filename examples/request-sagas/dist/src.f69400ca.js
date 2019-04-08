@@ -10247,9 +10247,7 @@ function () {
           API = this._apiConfig.API || RequestSagas.API;
           return [4
           /*yield*/
-          , reduxSagaEffects.call(API, action, this._apiConfig, this._requestActions.actions) //const emitter = API(action, this._apiConfig, this._requestActions.actions as RequestFuncs)
-          //yield reduxSagaEffects.fork(this.progressListener, emitter)
-          ];
+          , reduxSagaEffects.call(API, action, this._apiConfig, this._requestActions.actions)];
 
         case 1:
           _a.sent();
@@ -10261,7 +10259,7 @@ function () {
     });
   };
 
-  RequestSagas.prototype.request = function () {
+  RequestSagas.prototype.request = function (action) {
     return __generator(this, function (_a) {
       return [2
       /*return*/
@@ -10269,7 +10267,7 @@ function () {
     });
   };
 
-  RequestSagas.prototype.success = function () {
+  RequestSagas.prototype.success = function (action) {
     return __generator(this, function (_a) {
       return [2
       /*return*/
@@ -10277,7 +10275,7 @@ function () {
     });
   };
 
-  RequestSagas.prototype.failure = function () {
+  RequestSagas.prototype.failure = function (action) {
     return __generator(this, function (_a) {
       return [2
       /*return*/
@@ -10285,36 +10283,19 @@ function () {
     });
   };
 
-  RequestSagas.prototype.progressListener = function (chan) {
-    var action;
+  RequestSagas.prototype.progress = function (action) {
     return __generator(this, function (_a) {
-      switch (_a.label) {
-        case 0:
-          if (!true) return [3
-          /*break*/
-          , 3];
-          return [4
-          /*yield*/
-          , reduxSagaEffects.take(chan)];
+      return [2
+      /*return*/
+      ];
+    });
+  };
 
-        case 1:
-          action = _a.sent();
-          return [4
-          /*yield*/
-          , reduxSagaEffects.put(action)];
-
-        case 2:
-          _a.sent();
-
-          return [3
-          /*break*/
-          , 0];
-
-        case 3:
-          return [2
-          /*return*/
-          ];
-      }
+  RequestSagas.prototype.cancel = function (action) {
+    return __generator(this, function (_a) {
+      return [2
+      /*return*/
+      ];
     });
   };
 
@@ -10326,7 +10307,7 @@ function () {
           effect = reduxSagaEffects[this._config.reduxSagaEffect || 'takeLatest'];
           return [4
           /*yield*/
-          , reduxSagaEffects.all([effect(this._requestActions.type, this.start), effect(this._requestActions.types.request, this.request), effect(this._requestActions.types.success, this.success), effect(this._requestActions.types.failure, this.failure)])];
+          , reduxSagaEffects.all([effect(this._requestActions.type, this.start), effect(this._requestActions.types.request, this.request), effect(this._requestActions.types.success, this.success), effect(this._requestActions.types.failure, this.failure), effect(this._requestActions.types.progress, this.progress), effect(this._requestActions.types.cancel, this.cancel)])];
 
         case 1:
           _a.sent();
@@ -10352,6 +10333,7 @@ var ActionType;
 
 (function (ActionType) {
   ActionType["ShowFlash"] = "SHOW_FLASH";
+  ActionType["HideFlash"] = "HIDE_FLASH";
 })(ActionType = exports.ActionType || (exports.ActionType = {}));
 },{}],"store/members/sagas.ts":[function(require,module,exports) {
 "use strict";
@@ -10490,6 +10472,52 @@ var getMembersSagas = new RequestSagas_1.default(actions_1.MembersRestActions.ge
   method: 'GET'
 });
 
+getMembersSagas.request = function (action) {
+  return __generator(this, function (_a) {
+    switch (_a.label) {
+      case 0:
+        return [4
+        /*yield*/
+        , effects_1.put({
+          type: actions_2.ActionType.ShowFlash,
+          payload: {
+            message: 'Fetch members in progress'
+          }
+        })];
+
+      case 1:
+        _a.sent();
+
+        return [2
+        /*return*/
+        ];
+    }
+  });
+};
+
+getMembersSagas.progress = function (action) {
+  return __generator(this, function (_a) {
+    switch (_a.label) {
+      case 0:
+        return [4
+        /*yield*/
+        , effects_1.put({
+          type: actions_2.ActionType.ShowFlash,
+          payload: {
+            message: "It's coming soon !! (" + action.payload.percent + "%)"
+          }
+        })];
+
+      case 1:
+        _a.sent();
+
+        return [2
+        /*return*/
+        ];
+    }
+  });
+};
+
 getMembersSagas.success = function (action) {
   return __generator(this, function (_a) {
     switch (_a.label) {
@@ -10499,7 +10527,46 @@ getMembersSagas.success = function (action) {
         , effects_1.put({
           type: actions_2.ActionType.ShowFlash,
           payload: {
-            message: 'Members fetched!'
+            message: 'Ok, finally! What is this slowness ?! Shaquille O\'Neal is really heavy to load... ;)'
+          }
+        })];
+
+      case 1:
+        _a.sent();
+
+        return [4
+        /*yield*/
+        , effects_1.delay(5000)];
+
+      case 2:
+        _a.sent();
+
+        return [4
+        /*yield*/
+        , effects_1.put({
+          type: actions_2.ActionType.HideFlash
+        })];
+
+      case 3:
+        _a.sent();
+
+        return [2
+        /*return*/
+        ];
+    }
+  });
+};
+
+getMembersSagas.failure = function (action) {
+  return __generator(this, function (_a) {
+    switch (_a.label) {
+      case 0:
+        return [4
+        /*yield*/
+        , effects_1.put({
+          type: actions_2.ActionType.ShowFlash,
+          payload: {
+            message: 'OooOOOops!'
           }
         })];
 
@@ -10580,6 +10647,13 @@ exports.flashesReducer = function (state, action) {
       {
         return __assign({}, state, {
           message: action.payload.message
+        });
+      }
+
+    case actions_1.ActionType.HideFlash:
+      {
+        return __assign({}, state, {
+          message: undefined
         });
       }
 
@@ -10733,10 +10807,35 @@ Object.defineProperty(exports, "__esModule", {
 
 var effects_1 = require("redux-saga/effects");
 
-var API = function API(action, apiConfig, actions) {
+var increasePercent = function increasePercent(actions, percent) {
   return __generator(this, function (_a) {
     switch (_a.label) {
       case 0:
+        percent += 30;
+        return [4
+        /*yield*/
+        , effects_1.put(actions.progress({
+          payload: {
+            percent: percent
+          }
+        }))];
+
+      case 1:
+        _a.sent();
+
+        return [2
+        /*return*/
+        , percent];
+    }
+  });
+};
+
+var API = function API(action, apiConfig, actions) {
+  var percent;
+  return __generator(this, function (_a) {
+    switch (_a.label) {
+      case 0:
+        percent = 0;
         return [4
         /*yield*/
         , effects_1.put(actions.request())];
@@ -10746,45 +10845,48 @@ var API = function API(action, apiConfig, actions) {
 
         return [4
         /*yield*/
-        , effects_1.delay(100)];
+        , effects_1.delay(500)];
 
       case 2:
         _a.sent();
 
         return [4
         /*yield*/
-        , effects_1.put(actions.progress({
-          payload: {
-            percent: 50
-          }
-        }))];
+        , increasePercent(actions, percent)];
 
       case 3:
-        _a.sent();
-
+        percent = _a.sent();
         return [4
         /*yield*/
-        , effects_1.delay(100)];
+        , effects_1.delay(500)];
 
       case 4:
         _a.sent();
 
         return [4
         /*yield*/
-        , effects_1.put(actions.progress({
-          payload: {
-            percent: 80
-          }
-        }))];
+        , increasePercent(actions, percent)];
 
       case 5:
+        percent = _a.sent();
+        return [4
+        /*yield*/
+        , effects_1.delay(500)];
+
+      case 6:
         _a.sent();
 
         return [4
         /*yield*/
-        , effects_1.delay(100)];
+        , increasePercent(actions, percent)];
 
-      case 6:
+      case 7:
+        percent = _a.sent();
+        return [4
+        /*yield*/
+        , effects_1.delay(500)];
+
+      case 8:
         _a.sent();
 
         return [4
@@ -10804,7 +10906,7 @@ var API = function API(action, apiConfig, actions) {
           }
         }))];
 
-      case 7:
+      case 9:
         _a.sent();
 
         return [2
@@ -34754,7 +34856,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "56675" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "64828" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

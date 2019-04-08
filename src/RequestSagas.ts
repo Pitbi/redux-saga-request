@@ -30,25 +30,21 @@ class RequestSagas {
   * start(action: Action) {
     const API = this._apiConfig.API || RequestSagas.API
     yield reduxSagaEffects.call(API, action, this._apiConfig, this._requestActions.actions as RequestFuncs)
-    //const emitter = API(action, this._apiConfig, this._requestActions.actions as RequestFuncs)
-
-    //yield reduxSagaEffects.fork(this.progressListener, emitter)
   }
   
-  * request() {
+  * request(action:Action) {
   }
 
-  * success() {
+  * success(action:Action) {
   }
 
-  * failure() {
+  * failure(action:Action) {
   }
 
-  * progressListener(chan: any) {
-    while (true) {
-      const action = yield reduxSagaEffects.take(chan)
-      yield reduxSagaEffects.put(action)
-    }
+  * progress(action:Action) {
+  }
+
+  * cancel(action:Action) {
   }
 
   * saga() {
@@ -57,7 +53,9 @@ class RequestSagas {
       effect(this._requestActions.type, this.start),
       effect(this._requestActions.types.request, this.request),
       effect(this._requestActions.types.success, this.success),
-      effect(this._requestActions.types.failure, this.failure)
+      effect(this._requestActions.types.failure, this.failure),
+      effect(this._requestActions.types.progress, this.progress),
+      effect(this._requestActions.types.cancel, this.cancel)
     ])
   }
 }
