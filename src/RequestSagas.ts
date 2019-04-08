@@ -29,12 +29,13 @@ class RequestSagas {
 
   * start(action: Action) {
     const API = this._apiConfig.API || RequestSagas.API
-    const emitter = API(action, this._apiConfig, this._requestActions.actions as RequestFuncs)
-    yield reduxSagaEffects.fork(this.progressListener, emitter)
+    yield reduxSagaEffects.call(API, action, this._apiConfig, this._requestActions.actions as RequestFuncs)
+    //const emitter = API(action, this._apiConfig, this._requestActions.actions as RequestFuncs)
+
+    //yield reduxSagaEffects.fork(this.progressListener, emitter)
   }
   
   * request() {
-    console.log('reqyest')
   }
 
   * success() {

@@ -8384,12 +8384,33 @@ exports.MembersRestActions = new RestActions_1.default('MEMBERS');
 },{"../../../../../src/RestActions":"../../../src/RestActions.ts"}],"store/members/reducer.ts":[function(require,module,exports) {
 "use strict";
 
+var __assign = this && this.__assign || function () {
+  __assign = Object.assign || function (t) {
+    for (var s, i = 1, n = arguments.length; i < n; i++) {
+      s = arguments[i];
+
+      for (var p in s) {
+        if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
+      }
+    }
+
+    return t;
+  };
+
+  return __assign.apply(this, arguments);
+};
+
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+
+var actions_1 = require("./actions");
+
 exports.initialState = {
   all: [],
-  current: undefined
+  current: undefined,
+  loading: false,
+  fetchProgress: 0
 };
 
 exports.membersReducer = function (state, action) {
@@ -8398,37 +8419,37 @@ exports.membersReducer = function (state, action) {
   }
 
   switch (action.type) {
+    case actions_1.MembersRestActions.get.types.request:
+      {
+        return __assign({}, state, {
+          all: [],
+          loading: true,
+          fetchProgress: 0
+        });
+      }
+
+    case actions_1.MembersRestActions.get.types.progress:
+      {
+        return __assign({}, state, {
+          fetchProgress: action.payload.percent
+        });
+      }
+
+    case actions_1.MembersRestActions.get.types.success:
+      {
+        return __assign({}, state, {
+          all: action.payload.members,
+          loading: false
+        });
+      }
+
     default:
       {
         return state;
       }
   }
 };
-},{}],"store/members/types.ts":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-},{}],"store/members/index.ts":[function(require,module,exports) {
-"use strict";
-
-function __export(m) {
-  for (var p in m) {
-    if (!exports.hasOwnProperty(p)) exports[p] = m[p];
-  }
-}
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-__export(require("./actions"));
-
-__export(require("./reducer"));
-
-__export(require("./types"));
-},{"./actions":"store/members/actions.ts","./reducer":"store/members/reducer.ts","./types":"store/members/types.ts"}],"../../../node_modules/@redux-saga/symbols/dist/redux-saga-symbols.esm.js":[function(require,module,exports) {
+},{"./actions":"store/members/actions.ts"}],"../../../node_modules/@redux-saga/symbols/dist/redux-saga-symbols.esm.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -10219,15 +10240,16 @@ function () {
   };
 
   RequestSagas.prototype.start = function (action) {
-    var API, emitter;
+    var API;
     return __generator(this, function (_a) {
       switch (_a.label) {
         case 0:
           API = this._apiConfig.API || RequestSagas.API;
-          emitter = API(action, this._apiConfig, this._requestActions.actions);
           return [4
           /*yield*/
-          , reduxSagaEffects.fork(this.progressListener, emitter)];
+          , reduxSagaEffects.call(API, action, this._apiConfig, this._requestActions.actions) //const emitter = API(action, this._apiConfig, this._requestActions.actions as RequestFuncs)
+          //yield reduxSagaEffects.fork(this.progressListener, emitter)
+          ];
 
         case 1:
           _a.sent();
@@ -10241,7 +10263,6 @@ function () {
 
   RequestSagas.prototype.request = function () {
     return __generator(this, function (_a) {
-      console.log('reqyest');
       return [2
       /*return*/
       ];
@@ -10321,8 +10342,130 @@ function () {
 }();
 
 exports["default"] = RequestSagas;
-},{"redux-saga/effects":"../../../node_modules/redux-saga/dist/redux-saga-effects-npm-proxy.esm.js"}],"store/members/sagas.ts":[function(require,module,exports) {
+},{"redux-saga/effects":"../../../node_modules/redux-saga/dist/redux-saga-effects-npm-proxy.esm.js"}],"store/flashes/actions.ts":[function(require,module,exports) {
 "use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var ActionType;
+
+(function (ActionType) {
+  ActionType["ShowFlash"] = "SHOW_FLASH";
+})(ActionType = exports.ActionType || (exports.ActionType = {}));
+},{}],"store/members/sagas.ts":[function(require,module,exports) {
+"use strict";
+
+var __generator = this && this.__generator || function (thisArg, body) {
+  var _ = {
+    label: 0,
+    sent: function sent() {
+      if (t[0] & 1) throw t[1];
+      return t[1];
+    },
+    trys: [],
+    ops: []
+  },
+      f,
+      y,
+      t,
+      g;
+  return g = {
+    next: verb(0),
+    "throw": verb(1),
+    "return": verb(2)
+  }, typeof Symbol === "function" && (g[Symbol.iterator] = function () {
+    return this;
+  }), g;
+
+  function verb(n) {
+    return function (v) {
+      return step([n, v]);
+    };
+  }
+
+  function step(op) {
+    if (f) throw new TypeError("Generator is already executing.");
+
+    while (_) {
+      try {
+        if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+        if (y = 0, t) op = [op[0] & 2, t.value];
+
+        switch (op[0]) {
+          case 0:
+          case 1:
+            t = op;
+            break;
+
+          case 4:
+            _.label++;
+            return {
+              value: op[1],
+              done: false
+            };
+
+          case 5:
+            _.label++;
+            y = op[1];
+            op = [0];
+            continue;
+
+          case 7:
+            op = _.ops.pop();
+
+            _.trys.pop();
+
+            continue;
+
+          default:
+            if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) {
+              _ = 0;
+              continue;
+            }
+
+            if (op[0] === 3 && (!t || op[1] > t[0] && op[1] < t[3])) {
+              _.label = op[1];
+              break;
+            }
+
+            if (op[0] === 6 && _.label < t[1]) {
+              _.label = t[1];
+              t = op;
+              break;
+            }
+
+            if (t && _.label < t[2]) {
+              _.label = t[2];
+
+              _.ops.push(op);
+
+              break;
+            }
+
+            if (t[2]) _.ops.pop();
+
+            _.trys.pop();
+
+            continue;
+        }
+
+        op = body.call(thisArg, _);
+      } catch (e) {
+        op = [6, e];
+        y = 0;
+      } finally {
+        f = t = 0;
+      }
+    }
+
+    if (op[0] & 5) throw op[1];
+    return {
+      value: op[0] ? op[1] : void 0,
+      done: true
+    };
+  }
+};
 
 var __importDefault = this && this.__importDefault || function (mod) {
   return mod && mod.__esModule ? mod : {
@@ -10340,36 +10483,339 @@ var RequestSagas_1 = __importDefault(require("../../../../../src/RequestSagas"))
 
 var actions_1 = require("./actions");
 
+var actions_2 = require("../flashes/actions");
+
 var getMembersSagas = new RequestSagas_1.default(actions_1.MembersRestActions.get, {
   url: '/members',
   method: 'GET'
 });
+
+getMembersSagas.success = function (action) {
+  return __generator(this, function (_a) {
+    switch (_a.label) {
+      case 0:
+        return [4
+        /*yield*/
+        , effects_1.put({
+          type: actions_2.ActionType.ShowFlash,
+          payload: {
+            message: 'Members fetched!'
+          }
+        })];
+
+      case 1:
+        _a.sent();
+
+        return [2
+        /*return*/
+        ];
+    }
+  });
+};
+
 var sagas = [effects_1.fork(getMembersSagas.saga)];
 exports.default = sagas;
-},{"redux-saga/effects":"../node_modules/redux-saga/dist/redux-saga-effects-npm-proxy.esm.js","../../../../../src/RequestSagas":"../../../src/RequestSagas.ts","./actions":"store/members/actions.ts"}],"core/API.ts":[function(require,module,exports) {
+},{"redux-saga/effects":"../node_modules/redux-saga/dist/redux-saga-effects-npm-proxy.esm.js","../../../../../src/RequestSagas":"../../../src/RequestSagas.ts","./actions":"store/members/actions.ts","../flashes/actions":"store/flashes/actions.ts"}],"store/members/types.ts":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+},{}],"store/members/index.ts":[function(require,module,exports) {
+"use strict";
 
-var redux_saga_1 = require("redux-saga");
+function __export(m) {
+  for (var p in m) {
+    if (!exports.hasOwnProperty(p)) exports[p] = m[p];
+  }
+}
 
-var API = function API(action, apiConfig, requestActions) {
-  return redux_saga_1.eventChannel(function (emitter) {
-    emitter(requestActions.request());
-    setTimeout(function () {
-      emitter(requestActions.progress());
-    }, 300);
-    console.log(requestActions);
-    return function () {
-      return emitter(redux_saga_1.END);
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+__export(require("./actions"));
+
+__export(require("./reducer"));
+
+__export(require("./sagas"));
+
+__export(require("./types"));
+},{"./actions":"store/members/actions.ts","./reducer":"store/members/reducer.ts","./sagas":"store/members/sagas.ts","./types":"store/members/types.ts"}],"store/flashes/reducer.ts":[function(require,module,exports) {
+"use strict";
+
+var __assign = this && this.__assign || function () {
+  __assign = Object.assign || function (t) {
+    for (var s, i = 1, n = arguments.length; i < n; i++) {
+      s = arguments[i];
+
+      for (var p in s) {
+        if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
+      }
+    }
+
+    return t;
+  };
+
+  return __assign.apply(this, arguments);
+};
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var actions_1 = require("./actions");
+
+exports.initialState = {
+  message: undefined
+};
+
+exports.flashesReducer = function (state, action) {
+  if (state === void 0) {
+    state = exports.initialState;
+  }
+
+  switch (action.type) {
+    case actions_1.ActionType.ShowFlash:
+      {
+        return __assign({}, state, {
+          message: action.payload.message
+        });
+      }
+
+    default:
+      {
+        return state;
+      }
+  }
+};
+},{"./actions":"store/flashes/actions.ts"}],"store/flashes/types.ts":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+},{}],"store/flashes/index.ts":[function(require,module,exports) {
+"use strict";
+
+function __export(m) {
+  for (var p in m) {
+    if (!exports.hasOwnProperty(p)) exports[p] = m[p];
+  }
+}
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+__export(require("./actions"));
+
+__export(require("./reducer"));
+
+__export(require("./types"));
+},{"./actions":"store/flashes/actions.ts","./reducer":"store/flashes/reducer.ts","./types":"store/flashes/types.ts"}],"core/API.ts":[function(require,module,exports) {
+"use strict";
+
+var __generator = this && this.__generator || function (thisArg, body) {
+  var _ = {
+    label: 0,
+    sent: function sent() {
+      if (t[0] & 1) throw t[1];
+      return t[1];
+    },
+    trys: [],
+    ops: []
+  },
+      f,
+      y,
+      t,
+      g;
+  return g = {
+    next: verb(0),
+    "throw": verb(1),
+    "return": verb(2)
+  }, typeof Symbol === "function" && (g[Symbol.iterator] = function () {
+    return this;
+  }), g;
+
+  function verb(n) {
+    return function (v) {
+      return step([n, v]);
     };
-  }, redux_saga_1.buffers.expanding());
+  }
+
+  function step(op) {
+    if (f) throw new TypeError("Generator is already executing.");
+
+    while (_) {
+      try {
+        if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+        if (y = 0, t) op = [op[0] & 2, t.value];
+
+        switch (op[0]) {
+          case 0:
+          case 1:
+            t = op;
+            break;
+
+          case 4:
+            _.label++;
+            return {
+              value: op[1],
+              done: false
+            };
+
+          case 5:
+            _.label++;
+            y = op[1];
+            op = [0];
+            continue;
+
+          case 7:
+            op = _.ops.pop();
+
+            _.trys.pop();
+
+            continue;
+
+          default:
+            if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) {
+              _ = 0;
+              continue;
+            }
+
+            if (op[0] === 3 && (!t || op[1] > t[0] && op[1] < t[3])) {
+              _.label = op[1];
+              break;
+            }
+
+            if (op[0] === 6 && _.label < t[1]) {
+              _.label = t[1];
+              t = op;
+              break;
+            }
+
+            if (t && _.label < t[2]) {
+              _.label = t[2];
+
+              _.ops.push(op);
+
+              break;
+            }
+
+            if (t[2]) _.ops.pop();
+
+            _.trys.pop();
+
+            continue;
+        }
+
+        op = body.call(thisArg, _);
+      } catch (e) {
+        op = [6, e];
+        y = 0;
+      } finally {
+        f = t = 0;
+      }
+    }
+
+    if (op[0] & 5) throw op[1];
+    return {
+      value: op[0] ? op[1] : void 0,
+      done: true
+    };
+  }
+};
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var effects_1 = require("redux-saga/effects");
+
+var API = function API(action, apiConfig, actions) {
+  return __generator(this, function (_a) {
+    switch (_a.label) {
+      case 0:
+        return [4
+        /*yield*/
+        , effects_1.put(actions.request())];
+
+      case 1:
+        _a.sent();
+
+        return [4
+        /*yield*/
+        , effects_1.delay(100)];
+
+      case 2:
+        _a.sent();
+
+        return [4
+        /*yield*/
+        , effects_1.put(actions.progress({
+          payload: {
+            percent: 50
+          }
+        }))];
+
+      case 3:
+        _a.sent();
+
+        return [4
+        /*yield*/
+        , effects_1.delay(100)];
+
+      case 4:
+        _a.sent();
+
+        return [4
+        /*yield*/
+        , effects_1.put(actions.progress({
+          payload: {
+            percent: 80
+          }
+        }))];
+
+      case 5:
+        _a.sent();
+
+        return [4
+        /*yield*/
+        , effects_1.delay(100)];
+
+      case 6:
+        _a.sent();
+
+        return [4
+        /*yield*/
+        , effects_1.put(actions.success({
+          payload: {
+            members: [{
+              firstName: 'Michael',
+              lastName: 'Jordan'
+            }, {
+              firstName: 'Shaquille',
+              lastName: 'O\'Neal'
+            }, {
+              firstName: 'Charles',
+              lastName: 'Barkley'
+            }]
+          }
+        }))];
+
+      case 7:
+        _a.sent();
+
+        return [2
+        /*return*/
+        ];
+    }
+  });
 };
 
 exports.default = API;
-},{"redux-saga":"../node_modules/redux-saga/dist/redux-saga-core-npm-proxy.esm.js"}],"store/index.ts":[function(require,module,exports) {
+},{"redux-saga/effects":"../node_modules/redux-saga/dist/redux-saga-effects-npm-proxy.esm.js"}],"store/index.ts":[function(require,module,exports) {
 "use strict";
 
 var __generator = this && this.__generator || function (thisArg, body) {
@@ -10501,6 +10947,8 @@ var effects_1 = require("redux-saga/effects");
 
 var members_1 = require("./members");
 
+var flashes_1 = require("./flashes");
+
 var sagas_1 = __importDefault(require("./members/sagas"));
 
 var RequestSagas_1 = __importDefault(require("../../../../src/RequestSagas"));
@@ -10526,13 +10974,11 @@ var sagas = function sagas() {
         ];
     }
   });
-}; // Whenever an action is dispatched, Redux will update each top-level application state property
-// using the reducer with the matching name. It's important that the names match exactly, and that
-// the reducer acts on the corresponding ApplicationState property type.
-
+};
 
 exports.rootReducer = redux_1.combineReducers({
-  members: members_1.membersReducer
+  members: members_1.membersReducer,
+  flashes: flashes_1.flashesReducer
 });
 
 exports.createStore = function () {
@@ -10542,7 +10988,7 @@ exports.createStore = function () {
   sagaMiddleware.run(sagas);
   return store;
 };
-},{"redux":"../node_modules/redux/es/redux.js","redux-saga":"../node_modules/redux-saga/dist/redux-saga-core-npm-proxy.esm.js","redux-saga/effects":"../node_modules/redux-saga/dist/redux-saga-effects-npm-proxy.esm.js","./members":"store/members/index.ts","./members/sagas":"store/members/sagas.ts","../../../../src/RequestSagas":"../../../src/RequestSagas.ts","../core/API":"core/API.ts"}],"../node_modules/scheduler/cjs/scheduler.development.js":[function(require,module,exports) {
+},{"redux":"../node_modules/redux/es/redux.js","redux-saga":"../node_modules/redux-saga/dist/redux-saga-core-npm-proxy.esm.js","redux-saga/effects":"../node_modules/redux-saga/dist/redux-saga-effects-npm-proxy.esm.js","./members":"store/members/index.ts","./flashes":"store/flashes/index.ts","./members/sagas":"store/members/sagas.ts","../../../../src/RequestSagas":"../../../src/RequestSagas.ts","../core/API":"core/API.ts"}],"../node_modules/scheduler/cjs/scheduler.development.js":[function(require,module,exports) {
 var global = arguments[3];
 /** @license React v0.13.6
  * scheduler.development.js
@@ -34095,8 +34541,6 @@ function (_super) {
     var _this = _super !== null && _super.apply(this, arguments) || this;
 
     _this.componentDidMount = function () {
-      console.log(_this.props);
-
       _this.props.getMembers();
     };
 
@@ -34104,7 +34548,12 @@ function (_super) {
   }
 
   Members.prototype.render = function () {
-    return React.createElement("div", null, React.createElement("h2", null, "Members"));
+    var members = this.props.members;
+    return React.createElement("div", null, React.createElement("h2", null, "Members"), members.loading && React.createElement("span", null, "Loading... (", members.fetchProgress || 0, " %)"), React.createElement("ul", null, members.all.map(function (member, index) {
+      return React.createElement("li", {
+        key: index
+      }, member.firstName, " ", member.lastName);
+    })));
   };
 
   return Members;
@@ -34125,7 +34574,79 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 };
 
 exports.default = react_redux_1.connect(mapStateToProps, mapDispatchToProps)(Members);
-},{"react":"../node_modules/react/index.js","react-redux":"../node_modules/react-redux/es/index.js","../store/members":"store/members/index.ts"}],"index.tsx":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","react-redux":"../node_modules/react-redux/es/index.js","../store/members":"store/members/index.ts"}],"components/Flashes.tsx":[function(require,module,exports) {
+"use strict";
+
+var __extends = this && this.__extends || function () {
+  var _extendStatics = function extendStatics(d, b) {
+    _extendStatics = Object.setPrototypeOf || {
+      __proto__: []
+    } instanceof Array && function (d, b) {
+      d.__proto__ = b;
+    } || function (d, b) {
+      for (var p in b) {
+        if (b.hasOwnProperty(p)) d[p] = b[p];
+      }
+    };
+
+    return _extendStatics(d, b);
+  };
+
+  return function (d, b) {
+    _extendStatics(d, b);
+
+    function __() {
+      this.constructor = d;
+    }
+
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+  };
+}();
+
+var __importStar = this && this.__importStar || function (mod) {
+  if (mod && mod.__esModule) return mod;
+  var result = {};
+  if (mod != null) for (var k in mod) {
+    if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+  }
+  result["default"] = mod;
+  return result;
+};
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var React = __importStar(require("react"));
+
+var react_redux_1 = require("react-redux");
+
+var Flashes =
+/** @class */
+function (_super) {
+  __extends(Flashes, _super);
+
+  function Flashes() {
+    return _super !== null && _super.apply(this, arguments) || this;
+  }
+
+  Flashes.prototype.render = function () {
+    var flashes = this.props.flashes;
+    if (!flashes.message) return React.createElement(React.Fragment, null);
+    return React.createElement("div", null, React.createElement("h2", null, "Info"), flashes.message);
+  };
+
+  return Flashes;
+}(React.Component);
+
+var mapStateToProps = function mapStateToProps(state) {
+  return {
+    flashes: state.flashes
+  };
+};
+
+exports.default = react_redux_1.connect(mapStateToProps)(Flashes);
+},{"react":"../node_modules/react/index.js","react-redux":"../node_modules/react-redux/es/index.js"}],"index.tsx":[function(require,module,exports) {
 "use strict";
 
 var __extends = this && this.__extends || function () {
@@ -34184,6 +34705,8 @@ var react_dom_1 = require("react-dom");
 
 var Members_1 = __importDefault(require("./components/Members"));
 
+var Flashes_1 = __importDefault(require("./components/Flashes"));
+
 var App =
 /** @class */
 function (_super) {
@@ -34194,7 +34717,7 @@ function (_super) {
   }
 
   App.prototype.render = function () {
-    return React.createElement("div", null, React.createElement("h1", null, "Hello World!"), React.createElement(Members_1.default, null));
+    return React.createElement("div", null, React.createElement("h1", null, "Hello World!"), React.createElement(Members_1.default, null), React.createElement(Flashes_1.default, null));
   };
 
   return App;
@@ -34203,7 +34726,7 @@ function (_super) {
 react_dom_1.render(React.createElement(react_redux_1.Provider, {
   store: store_1.createStore()
 }, React.createElement(App, null)), document.getElementById('root'));
-},{"react":"../node_modules/react/index.js","react-redux":"../node_modules/react-redux/es/index.js","./store":"store/index.ts","react-dom":"../node_modules/react-dom/index.js","./components/Members":"components/Members.tsx"}],"../node_modules/parcel/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","react-redux":"../node_modules/react-redux/es/index.js","./store":"store/index.ts","react-dom":"../node_modules/react-dom/index.js","./components/Members":"components/Members.tsx","./components/Flashes":"components/Flashes.tsx"}],"../node_modules/parcel/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -34231,7 +34754,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "62867" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "56675" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

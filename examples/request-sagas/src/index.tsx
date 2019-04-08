@@ -3,6 +3,7 @@ import { Provider } from 'react-redux'
 import { createStore } from './store'
 import { render } from 'react-dom'
 import Members from './components/Members'
+import Flashes from './components/Flashes'
 
 class App extends React.Component {
   render() {
@@ -10,6 +11,7 @@ class App extends React.Component {
       <div>
         <h1>Hello World!</h1>
         <Members />
+        <Flashes />
       </div>
     )
   }

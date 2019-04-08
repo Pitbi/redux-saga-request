@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { connect } from 'react-redux'
 import { AppState } from '../store'
-import { MembersRestActions } from '../store/members'
+import { MembersRestActions, membersReducer } from '../store/members'
 import { MembersState } from '../store/members'
 
 interface MembersProps {
@@ -12,15 +12,24 @@ interface MembersProps {
 class Members extends React.Component<MembersProps> {
     
   componentDidMount = () => {
-    console.log(this.props)
     this.props.getMembers()
   }
 
   render() {
+    const { members } = this.props
     return (
       <div>
         <h2>Members</h2>
-        
+        {
+          members.loading && <span>Loading... ({ members.fetchProgress || 0 } %)</span>
+        }
+        <ul>
+          {
+            members.all.map((member:object, index) =>
+              <li key={ index }>{ member.firstName } {member.lastName }</li>
+            )
+          }
+        </ul>
       </div>
     )
   }

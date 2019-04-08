@@ -1,16 +1,35 @@
 import { eventChannel, END, buffers } from 'redux-saga'
+import { put, call, delay } from 'redux-saga/effects'
 
-const API = (action:any, apiConfig:any, requestActions:any) => {
-  return eventChannel((emitter:any) => {
-    emitter(requestActions.request())
-
-    setTimeout(() => {
-      emitter(requestActions.progress())
-    }, 300)
-    console.log(requestActions)
-    
-    return () => emitter(END)
-  }, buffers.expanding())
+const API = function* (action:any, apiConfig:any, actions:any)  {
+  yield put(actions.request())
+  yield delay(100)
+  yield put(actions.progress({
+    payload: {
+      percent: 50
+    }
+  }))
+  yield delay(100)
+  yield put(actions.progress({
+    payload: {
+      percent: 80
+    }
+  }))
+  yield delay(100)
+  yield put(actions.success({
+    payload: {
+      members: [{
+        firstName: 'Michael',
+        lastName: 'Jordan'
+      }, {
+        firstName: 'Shaquille',
+        lastName: 'O\'Neal'
+      }, {
+        firstName: 'Charles',
+        lastName: 'Barkley'
+      }]
+    }
+  }))
 }
 
 export default API

@@ -2,16 +2,16 @@ import { combineReducers, createStore as createReduxStore, applyMiddleware, comp
 import createSagaMiddleware from 'redux-saga'
 import { all } from 'redux-saga/effects'
 import { MembersState, membersReducer } from './members'
+import { FlashesState, flashesReducer } from './flashes'
 import MembersSagas from './members/sagas'
 import RequestSagas from '../../../../src/RequestSagas'
 import API from '../core/API'
 
 //CONFIG
-
 export interface ApplicationState {
-  members: MembersState
+  members: MembersState,
+  flashes: FlashesState
 }
-
 
 //SAGAS
 RequestSagas.API = API
@@ -27,11 +27,9 @@ declare global {
   interface Window { __REDUX_DEVTOOLS_EXTENSION__: any }
 }
 
-// Whenever an action is dispatched, Redux will update each top-level application state property
-// using the reducer with the matching name. It's important that the names match exactly, and that
-// the reducer acts on the corresponding ApplicationState property type.
 export const rootReducer = combineReducers<ApplicationState>({
   members: membersReducer,
+  flashes: flashesReducer
 })
 
 export const createStore = () => {
