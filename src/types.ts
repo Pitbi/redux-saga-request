@@ -1,5 +1,5 @@
 import RequestActions from './RequestActions'
-
+import RequestSagas from './RequestSagas'
 //Request Actions
 export interface Action {
   type: string,
@@ -71,7 +71,22 @@ export interface RequestSagasConfig {
 }
 
 export interface RequestSagasApiConfig {
-  url: string,
-  method: string,
+  [key: string]: any
+}
+
+export interface RestSagasMethods {
+  get: RequestSagas,
+  head: RequestSagas,
+  post: RequestSagas,
+  put: RequestSagas,
+  delete: RequestSagas,
+  patch: RequestSagas
+}
+
+/**
+ * @param resource ex: /cars
+ */
+export interface RestSagasConfig {
+  resource: string,
   [key: string]: any
 }
