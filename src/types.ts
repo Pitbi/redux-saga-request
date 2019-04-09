@@ -47,8 +47,8 @@ export interface RequestActionConfig {
 
 //REST
 export enum RestMethods {
-  get = 'gest',
-  head = 'head',
+  get = 'get',
+  getOne = 'getOne',
   post = 'post',
   put = 'put',
   delete = 'delete',
@@ -57,7 +57,7 @@ export enum RestMethods {
 
 export interface RestActionsMethods {
   get: RequestActions,
-  head: RequestActions,
+  getOne: RequestActions,
   post: RequestActions,
   put: RequestActions,
   delete: RequestActions,
@@ -76,7 +76,7 @@ export interface RequestSagasApiConfig {
 
 export interface RestSagasMethods {
   get: RequestSagas,
-  head: RequestSagas,
+  getOne: RequestSagas,
   post: RequestSagas,
   put: RequestSagas,
   delete: RequestSagas,
@@ -87,6 +87,6 @@ export interface RestSagasMethods {
  * @param resource ex: /cars
  */
 export interface RestSagasConfig {
-  resource: string,
+  baseUrl: string,
   [key: string]: any
 }

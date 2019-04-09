@@ -23,31 +23,35 @@ class RequestSagas {
     this.failure = this.failure.bind(this)
   }
 
-  static API() {
+  public static setAPI(API) {
+    RequestSagas.API = API
+  }
+
+  public static API() {
     throw 'No API method setted'
   }
 
-  * start(action: Action) {
+  public * start(action: Action) {
     const API = this._apiConfig.API || RequestSagas.API
     yield reduxSagaEffects.call(API, action, this._apiConfig, this._requestActions.actions as RequestFuncs)
   }
   
-  * request(action:Action) {
+  public * request(action:Action) {
   }
 
-  * success(action:Action) {
+  public * success(action:Action) {
   }
 
-  * failure(action:Action) {
+  public * failure(action:Action) {
   }
 
-  * progress(action:Action) {
+  public * progress(action:Action) {
   }
 
-  * cancel(action:Action) {
+  public * cancel(action:Action) {
   }
 
-  * saga() {
+  public * saga() {
     const effect = reduxSagaEffects[this._config.reduxSagaEffect || 'takeLatest']
     yield reduxSagaEffects.all([
       effect(this._requestActions.type, this.start),

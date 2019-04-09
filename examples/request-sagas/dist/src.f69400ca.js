@@ -8226,8 +8226,8 @@ var ActionTypes;
 var RestMethods;
 
 (function (RestMethods) {
-  RestMethods["get"] = "gest";
-  RestMethods["head"] = "head";
+  RestMethods["get"] = "get";
+  RestMethods["getOne"] = "getOne";
   RestMethods["post"] = "post";
   RestMethods["put"] = "put";
   RestMethods["delete"] = "delete";
@@ -10235,6 +10235,10 @@ function () {
     this.failure = this.failure.bind(this);
   }
 
+  RequestSagas.setAPI = function (API) {
+    RequestSagas.API = API;
+  };
+
   RequestSagas.API = function () {
     throw 'No API method setted';
   };
@@ -10894,12 +10898,15 @@ var API = function API(action, apiConfig, actions) {
         , effects_1.put(actions.success({
           payload: {
             members: [{
+              _id: 0,
               firstName: 'Michael',
               lastName: 'Jordan'
             }, {
+              _id: 1,
               firstName: 'Shaquille',
               lastName: 'O\'Neal'
             }, {
+              _id: 2,
               firstName: 'Charles',
               lastName: 'Barkley'
             }]
@@ -11058,7 +11065,7 @@ var RequestSagas_1 = __importDefault(require("../../../../src/RequestSagas"));
 var API_1 = __importDefault(require("../core/API")); //SAGAS
 
 
-RequestSagas_1.default.API = API_1.default;
+RequestSagas_1.default.setAPI(API_1.default);
 
 var sagas = function sagas() {
   return __generator(this, function (_a) {
@@ -34651,9 +34658,9 @@ function (_super) {
 
   Members.prototype.render = function () {
     var members = this.props.members;
-    return React.createElement("div", null, React.createElement("h2", null, "Members"), members.loading && React.createElement("span", null, "Loading... (", members.fetchProgress || 0, " %)"), React.createElement("ul", null, members.all.map(function (member, index) {
+    return React.createElement("div", null, React.createElement("h2", null, "Members"), members.loading && React.createElement("span", null, "Loading... (", members.fetchProgress || 0, " %)"), React.createElement("ul", null, members.all.map(function (member) {
       return React.createElement("li", {
-        key: index
+        key: member._id
       }, member.firstName, " ", member.lastName);
     })));
   };
@@ -34856,7 +34863,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "64828" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "64185" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

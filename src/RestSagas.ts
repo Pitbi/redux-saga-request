@@ -8,13 +8,9 @@ import {
   RestSagasConfig
 } from './types'
 
-export interface RestSagasConfig {
-
-}
-
 class RestSagas implements RestSagasMethods {
   public get: RequestSagas
-  public head: RequestSagas
+  public getOne: RequestSagas
   public post: RequestSagas
   public put: RequestSagas
   public delete: RequestSagas
@@ -33,15 +29,18 @@ class RestSagas implements RestSagasMethods {
       this[method] = new RequestSagas(
         this._restActions[method],
         {
-          url: this._buildUrl(method),
+          baseUrl: this._buildUrl(method),
           method
         }
       )
     })
   }
 
-  _buildUrl(method:RestMethods) {
-    return `${this._config.resource}/method`
+  _buildUrl(method:string) {
+    const itemMethods = ['getOne', 'put', 'delete', 'patch']
+    if (itemMethods.includes(method))
+      return `${this._config.baseUrl}/:id`
+    return this._config.baseUrl
   }
 }
 

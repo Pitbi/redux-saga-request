@@ -1,26 +1,35 @@
-import RestSagas from '../src/RequestSagas'
+import RestSagas from '../src/RestSagas'
+import RestActions from '../src/RestActions'
 import RequestSagas from '../src/RequestSagas'
 
-const expectedMethods = ['get', 'head', 'post', 'put', 'delete', 'patch']
+const expectedMethods = ['get', 'getOne', 'post', 'put', 'delete', 'patch']
 
-const restActions = new RestSagas({
-  url: '/test',
-  method: 'post',
-  body: {
-    name: 'test'
-  }
+const restActions = new RestActions('TEST')
+const restSagas = new RestSagas(restActions, {
+  baseUrl: '/test'
 })
 
 describe('RestAction', () => {
-  test('Expect rest methods', () => {
-    expectedMethods.forEach(method => {
-      expect(restActions[method]).toBeInstanceOf(RequestActions)
+  describe('Build urls', () => {
+    test('Item urls', () => {
+      const itemMethods = ['getOne', 'put', 'delete', 'patch']
+      itemMethods.forEach((method: string) => {
+        const url = restSagas._buildUrl(method)
+        expect(url).toBe('/test/:id')
+      })
+    })
+    test('Resource urls', () => {
+      const itemMethods = ['get', 'post']
+      itemMethods.forEach((method: string) => {
+        const url = restSagas._buildUrl(method)
+        expect(url).toBe('/test')
+      })
     })
   })
-  test('Expect get method', () => {
-    const type = '@@RA_GET_TEST' 
-    expect(restActions.get.type).toBe(type)
-    const action = restActions.get.action()
-    expect(action).toEqual({ type })
+  test('Expect rest methods', () => {
+    expectedMethods.forEach(method => {
+      expect(restSagas[method]).toBeInstanceOf(RequestSagas)
+      console.log(restSagas)
+    })
   })
 })

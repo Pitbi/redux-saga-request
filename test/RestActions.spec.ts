@@ -1,7 +1,7 @@
 import RestActions from '../src/RestActions'
 import RequestActions from '../src/RequestActions'
 
-const expectedMethods = ['get', 'head', 'post', 'put', 'delete', 'patch']
+const expectedMethods = ['get', 'getOne', 'post', 'put', 'delete', 'patch']
 
 const restActions = new RestActions('TEST')
 
