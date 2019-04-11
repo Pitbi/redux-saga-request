@@ -7,7 +7,7 @@ import {
 
 class RestActions implements RestActionsMethods {
   public get: RequestActions
-  public head: RequestActions
+  public getOne: RequestActions
   public post: RequestActions
   public put: RequestActions
   public delete: RequestActions

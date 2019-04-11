@@ -14,7 +14,7 @@ export interface ApplicationState {
 }
 
 //SAGAS
-RequestSagas.API = API
+RequestSagas.setAPI(API)
 
 const sagas = function* () {
   yield all([

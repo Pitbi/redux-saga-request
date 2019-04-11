@@ -2,7 +2,7 @@ import * as React from 'react'
 import { connect } from 'react-redux'
 import { AppState } from '../store'
 import { MembersRestActions, membersReducer } from '../store/members'
-import { MembersState } from '../store/members'
+import { MembersState, Member } from '../store/members'
 
 interface MembersProps {
   getMembers(): any
@@ -25,8 +25,8 @@ class Members extends React.Component<MembersProps> {
         }
         <ul>
           {
-            members.all.map((member:object, index) =>
-              <li key={ index }>{ member.firstName } {member.lastName }</li>
+            members.all.map((member:Member) =>
+              <li key={ member._id }>{ member.firstName } {member.lastName }</li>
             )
           }
         </ul>
