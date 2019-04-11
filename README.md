@@ -1,4 +1,4 @@
-# redux-saga-request
+# redux-rest-saga
 
 ## Get started
 
