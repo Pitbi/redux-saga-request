@@ -15,12 +15,14 @@ class RestSagas implements RestSagasMethods {
   public put: RequestSagas
   public delete: RequestSagas
   public patch: RequestSagas
+  public sagas: Array<any>
   private _restActions: RestActionsMethods
   private _config: RestSagasConfig
 
   constructor(restActions: RestActionsMethods, config: RestSagasConfig) {
     this._restActions = restActions
     this._config = config
+    this.sagas = []
     this._build()
   }
 
@@ -33,6 +35,7 @@ class RestSagas implements RestSagasMethods {
           method
         }
       )
+      this.sagas.push(this[method].saga)
     })
   }
 

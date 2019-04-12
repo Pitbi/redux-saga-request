@@ -26,10 +26,12 @@ describe('RestAction', () => {
       })
     })
   })
+  test('Expect listeners', () => {
+    expect(restSagas.sagas).toHaveLength(expectedMethods.length)
+  })
   test('Expect rest methods', () => {
     expectedMethods.forEach(method => {
       expect(restSagas[method]).toBeInstanceOf(RequestSagas)
-      console.log(restSagas)
     })
   })
 })
