@@ -28,6 +28,7 @@ describe('RestAction', () => {
   })
   test('Expect listeners', () => {
     expect(restSagas.sagas).toHaveLength(expectedMethods.length)
+    expect(restSagas.forkSagas).toHaveLength(expectedMethods.length)
   })
   test('Expect rest methods', () => {
     expectedMethods.forEach(method => {

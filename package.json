@@ -2,11 +2,12 @@
   "name": "redux-rest-sagas",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
     "test": "jest --no-cache",
     "testw": "yarn test --watch",
-    "build": "tsc"
+    "build": "tsc --declaration"
   },
   "repository": {
     "type": "git",

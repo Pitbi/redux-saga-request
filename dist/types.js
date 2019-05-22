@@ -1,5 +1,5 @@
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var ActionTypes;
 (function (ActionTypes) {
     ActionTypes["request"] = "request";
@@ -11,8 +11,8 @@ var ActionTypes;
 //REST
 var RestMethods;
 (function (RestMethods) {
-    RestMethods["get"] = "gest";
-    RestMethods["head"] = "head";
+    RestMethods["get"] = "get";
+    RestMethods["getOne"] = "getOne";
     RestMethods["post"] = "post";
     RestMethods["put"] = "put";
     RestMethods["delete"] = "delete";

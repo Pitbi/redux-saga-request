@@ -1,4 +1,5 @@
 import RequestSagas from './RequestSagas'
+import { fork } from 'redux-saga/effects'
 
 import {
   RestMethods,
@@ -26,6 +27,10 @@ class RestSagas implements RestSagasMethods {
     this._build()
   }
 
+  get forkSagas() {
+    return this.sagas.map(saga => fork(saga))
+  }
+
   _build() {
     Object.keys(RestMethods).forEach((method: RestMethods) => {
       this[method] = new RequestSagas(
@@ -39,7 +44,7 @@ class RestSagas implements RestSagasMethods {
     })
   }
 
-  _buildUrl(method:string) {
+  _buildUrl(method: string) {
     const itemMethods = ['getOne', 'put', 'delete', 'patch']
     if (itemMethods.includes(method))
       return `${this._config.baseUrl}/:id`
